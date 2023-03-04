@@ -33,11 +33,11 @@ const AnecdoteForm = () => {
     },
 
     onError:(error) => {
-         
+       
          notificationDispatch({
           type:ACTIONS.NOTIFY,
            payload:{
-            notification:error.message
+            notification:error.response.data.error
            }
          })
 
