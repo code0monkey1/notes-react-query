@@ -1,11 +1,13 @@
 import { useMutation, useQueryClient } from 'react-query';
-
 import Notification from './Notification';
+import { ACTIONS, useNotificationDispatch } from './context/NotificationContext';
 import { addAnecdotes } from "./requests";
 
 const AnecdoteForm = () => {
   
   const clientQuery = useQueryClient()
+
+  const notificationDispatch = useNotificationDispatch()
   
    const addAnecdotesMutation = useMutation(addAnecdotes,
     {
@@ -15,7 +17,37 @@ const AnecdoteForm = () => {
    console.log("the new anecdote recieved ",newAnecdote)
       clientQuery
       .setQueriesData('anecdotes',anecdotes.concat(newAnecdote))
+
+         notificationDispatch({
+          type:ACTIONS.NOTIFY,
+           payload:{
+            notification:"New Note Added : "+newAnecdote.content
+           }
+         })
+
+         setTimeout(() =>{
+           notificationDispatch({
+            type:ACTIONS.CLEAR
+           })
+         },5000)
     },
+
+    onError:(error) => {
+         
+         notificationDispatch({
+          type:ACTIONS.NOTIFY,
+           payload:{
+            notification:error.message
+           }
+         })
+
+         setTimeout(() =>{
+           notificationDispatch({
+            type:ACTIONS.CLEAR
+           })
+         },5000)
+          
+    }
     
   })
 
@@ -34,7 +66,7 @@ const AnecdoteForm = () => {
   
   return (
     <div>
-     {addAnecdotesMutation.isError && <Notification error={addAnecdotesMutation.error.message} />}
+     { <Notification/>}
       <h3>create new</h3>
       <form onSubmit={onCreate}>
         <input name='anecdote' />

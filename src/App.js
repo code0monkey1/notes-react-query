@@ -1,9 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import AnecdoteForm from './AnecdoteForm';
 import './App.css';
+import { ACTIONS, useNotificationDispatch } from './context/NotificationContext';
 import { getAnecdotes, modifyAnecdotes } from './requests';
 
 function App() {
+
+ 
+  const notificationDispatch = useNotificationDispatch()
   
   const result = useQuery('anecdotes',getAnecdotes,{
     retry:false,
@@ -14,12 +18,32 @@ function App() {
  
  
   const modifyAnecdotesMutation = useMutation(modifyAnecdotes,{
+
     onSuccess:(modifiedAnecdote)=>{
 
       const anecdotes = clientQuery
       .getQueryData('anecdotes')
      
       clientQuery.setQueryData('anecdotes', anecdotes.map((anecdote)=> anecdote.id===modifiedAnecdote.id?modifiedAnecdote:anecdote))
+      
+      //Notify
+
+       notificationDispatch({
+        type:ACTIONS.NOTIFY,
+        payload:{
+          notification:"Vote increased"
+        }
+      })
+
+      //Clear Notification
+     setTimeout(()=>{
+
+      notificationDispatch({
+            type:ACTIONS.CLEAR
+          })
+          
+     },5000)
+    
     }
   })
   
@@ -55,6 +79,7 @@ function App() {
           </div>
         </div>
       )}
+   
     </div>
   );
 }

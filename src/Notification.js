@@ -1,25 +1,10 @@
-import { useEffect, useState } from "react"
-
-const Notification = ({error}) => {
-    console.log("err:",error)
+import { useNotification } from "./context/NotificationContext"
 
 
-    const [message,setMessage] = useState(error)
-  
-   useEffect(() => {
-    console.log("The status is",error)
-    
-    if(error) {
-        setMessage(error)
-
-            setTimeout(()=>{
-        setMessage('')
-      },3000)
-      }
-
-   }, [error])
+const Notification = () => {
    
- 
+  const notification = useNotification()
+
   const style = {
     border: 'solid',
     padding: 10,
@@ -27,7 +12,7 @@ const Notification = ({error}) => {
     marginBottom: 5
   }
   
-  return  <>{message?<div style={style}>{message}</div>:''}</>
+  return  <>{notification?<div style={style}>{notification}</div>:''}</>
   
 
 
