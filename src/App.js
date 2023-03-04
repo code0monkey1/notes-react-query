@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import AnecdoteForm from './AnecdoteForm';
+import Anecdotes from './Anecdotes';
 import './App.css';
 import { ACTIONS, useNotificationDispatch } from './context/NotificationContext';
 import { getAnecdotes, modifyAnecdotes } from './requests';
 
 function App() {
 
- 
   const notificationDispatch = useNotificationDispatch()
   
   const result = useQuery('anecdotes',getAnecdotes,{
@@ -54,8 +54,6 @@ function App() {
   if(result.isError){
     return <div>Anecdote service not available due to problems in the server</div>
   }
-
-  const anecdotes = result.data
   
   const handleVote =(anecdote)=>{
       console.log("handleVote",anecdote)
@@ -66,20 +64,8 @@ function App() {
   
    return (
     <div className="App">
-
       <AnecdoteForm/>
-     {anecdotes.map(anecdote =>
-        <div key={anecdote.id}>
-          <div>
-            {anecdote.content}
-          </div>
-          <div>
-            has {anecdote.votes}
-            <button onClick={() => handleVote(anecdote)}>vote</button>
-          </div>
-        </div>
-      )}
-   
+      <Anecdotes handleVote={handleVote} />
     </div>
   );
 }
