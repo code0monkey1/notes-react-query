@@ -9,6 +9,7 @@ function App() {
     retry:false,
     refetchOnWindowFocus:false,
   })
+
   const clientQuery = useQueryClient();
  
  
@@ -41,6 +42,7 @@ function App() {
   
    return (
     <div className="App">
+
       <AnecdoteForm/>
      {anecdotes.map(anecdote =>
         <div key={anecdote.id}>

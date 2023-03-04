@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import Notification from './Notification';
 import { addAnecdotes } from "./requests";
+
 const AnecdoteForm = () => {
   
   const clientQuery = useQueryClient()
@@ -14,7 +15,8 @@ const AnecdoteForm = () => {
    console.log("the new anecdote recieved ",newAnecdote)
       clientQuery
       .setQueriesData('anecdotes',anecdotes.concat(newAnecdote))
-    }
+    },
+    
   })
 
   const onCreate = async (event) => {
@@ -29,16 +31,10 @@ const AnecdoteForm = () => {
     event.target.anecdote.value = ''
   }
 
-
-  if(addAnecdotesMutation.isError){
-     
-     console.log("Error: " + addAnecdotesMutation.error.message)
-
-  }
   
   return (
     <div>
-      <Notification addAnecdotesMutation={addAnecdotesMutation}/>
+     {addAnecdotesMutation.isError && <Notification error={addAnecdotesMutation.error.message} />}
       <h3>create new</h3>
       <form onSubmit={onCreate}>
         <input name='anecdote' />

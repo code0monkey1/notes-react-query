@@ -1,20 +1,23 @@
 import { useEffect, useState } from "react"
 
-const Notification = ({addAnecdotesMutation}) => {
-    
-    const [message,setMessage] = useState('')
+const Notification = ({error}) => {
+    console.log("err:",error)
 
+
+    const [message,setMessage] = useState(error)
+  
    useEffect(() => {
-      
-    if(addAnecdotesMutation.isError) {
-        setMessage('Error')
+    console.log("The status is",error)
+    
+    if(error) {
+        setMessage(error)
 
             setTimeout(()=>{
         setMessage('')
       },3000)
       }
 
-   }, [])
+   }, [error])
    
  
   const style = {
@@ -24,17 +27,8 @@ const Notification = ({addAnecdotesMutation}) => {
     marginBottom: 5
   }
   
-
-  return <>
+  return  <>{message?<div style={style}>{message}</div>:''}</>
   
-  {
-    message?<div style={style}>
-     {message}
-    </div>:''
-  }
-  
-  
-  </>
 
 
 
